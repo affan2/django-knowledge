@@ -84,10 +84,13 @@ class KnowledgeBase(models.Model):
         their username if all else fails.
         """
         name = (self.name or (self.user and (
-            u'{0} {1}'.format(self.user.first_name, self.user.last_name).strip()\
+            u'{0} {1}'.format(self.user.first_name, self.user.last_name).strip()
             or self.user.username
         )))
-        return name.strip() or _("Anonymous")
+        if name:
+            return name.strip()
+
+        return None
 
     get_email = lambda s: s.email or (s.user and s.user.email)
     get_pair = lambda s: (s.get_name(), s.get_email())
