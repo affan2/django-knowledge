@@ -133,7 +133,8 @@ def ResponseForm(user, question, *args, **kwargs):
 
 
 class QuestionAdminForm(autocomplete_light.FixedModelForm):
-    body = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 10, 'style': 'width:100%'}))
+    body = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 10, 'style': 'width:100%'}),
+                           required=False)
 
     class Meta:
         model = Question
