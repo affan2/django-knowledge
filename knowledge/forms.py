@@ -1,8 +1,12 @@
+import autocomplete_light
+
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from knowledge import settings
 from knowledge.models import Question, Response
+from tinymce.widgets import TinyMCE
+
 
 OPTIONAL_FIELDS = ['alert', 'phone_number']
 
@@ -126,3 +130,31 @@ def ResponseForm(user, question, *args, **kwargs):
             fields = selected_fields
 
     return _ResponseForm(*args, **kwargs)
+
+
+class QuestionAdminForm(autocomplete_light.FixedModelForm):
+    body = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 10, 'style': 'width:100%'}))
+
+    class Meta:
+        model = Question
+        widgets = autocomplete_light.get_widgets_dict(Question)
+
+
+class ResponseAdminForm(autocomplete_light.FixedModelForm):
+    body = forms.CharField(
+        widget=TinyMCE(
+            attrs={'cols': 80, 'rows': 10, 'style': 'width:100%'},
+            mce_attrs={
+                'theme_advanced_buttons1_add': "separator,code",
+                'valid_elements': "@[title],"
+                                  "a[href|target|title|name],strong/b,em/i,u,"
+                                  "#p,-ol[type|compact],-ul[type|compact],-li,br,"
+                                  "-sub,-sup,cite,abbr,acronym,"
+                                  "iframe[class|height|id|longdesc|marginheight|marginwidth|name|src|style|title|width]"
+            }
+        )
+    )
+
+    class Meta:
+        model = Response
+        widgets = autocomplete_light.get_widgets_dict(Response)
