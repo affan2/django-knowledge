@@ -39,7 +39,7 @@ def get_my_questions(request):
 def get_categories(request):
     categories = Category.objects.all()
     for category in categories:
-        setattr(category, 'questions', Question.objects.can_view(request.user).filter(categories=category).prefetch_related('responses__question')[0:20])
+        setattr(category, 'questions', Question.objects.can_view(request.user).filter(categories=category).prefetch_related('responses__question').order_by('-id')[0:20])
 
     return categories
 
